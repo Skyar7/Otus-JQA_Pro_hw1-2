@@ -17,34 +17,34 @@ import java.util.stream.Collectors;
 
 public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
 
-    private WebDriver driver = null;
-    @Override
-    public void afterEach(ExtensionContext extensionContext) throws Exception {
-        if(driver != null) {
-            driver.close();
-            driver.quit();
-        }
+  private EventFiringWebDriver driver = null;
+
+  @Override
+  public void beforeEach(ExtensionContext extensionContext) throws IllegalAccessException {
+    driver = new WebDriverFactory().create();
+    driver.register(new WebDriverListener());
+    List<Field> fields = this.getAnnotatedFields(Driver.class, extensionContext);
+
+    for (Field field : fields) {
+      if (field.getType().getName().equals(WebDriver.class.getName())) {
+        field.setAccessible(true);
+        field.set(extensionContext.getTestInstance().get(), driver);
+      }
     }
+  }
 
-    @Override
-    public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        Class clazz = extensionContext.getTestInstance().getClass();
-        List<Field> annotatedFields = getFields(Driver.class, clazz);
-
-        EventFiringWebDriver eventFiringWebDriver = new WebDriverFactory().create();
-        eventFiringWebDriver.register(new WebDriverListener());
-
-        for(Field field: annotatedFields) {
-            field.setAccessible(true);
-            field.set(extensionContext.getTestInstance().get(), eventFiringWebDriver);
-        }
+  @Override
+  public void afterEach(ExtensionContext extensionContext) throws Exception {
+    if (driver != null) {
+      driver.close();
+      driver.quit();
     }
+  }
 
-    private List<Field> getFields(Class<? extends Annotation> annotation, Class clazz) {
-        return Arrays
-                .stream(clazz.getFields())
-                .filter((Field field) -> field.isAnnotationPresent(annotation)
-                        && field.getType().getName().equals(WebDriver.class.getName()))
-                .collect(Collectors.toList());
-    }
+  private List<Field> getAnnotatedFields(Class<? extends Annotation> annotation, ExtensionContext extensionContext) {
+    Class<?> testClass = extensionContext.getTestClass().get();
+    return Arrays.stream(testClass.getDeclaredFields())
+            .filter(field -> field.isAnnotationPresent(annotation))
+            .collect(Collectors.toList());
+  }
 }

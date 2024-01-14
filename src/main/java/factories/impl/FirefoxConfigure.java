@@ -6,17 +6,17 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class FirefoxConfigure implements IBrowserSettings {
-    private String browserVersion = System.getProperty("browser.version");
+  private String browserVersion = System.getProperty("browser.version");
 
-    @Override
-    public WebDriver configure() {
-        FirefoxOptions firefoxOptions = new FirefoxOptions();
+  @Override
+  public WebDriver configure() {
+    FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-        firefoxOptions.addArguments("--disable-notifications");
-        firefoxOptions.addArguments("--start-maximized");
+    firefoxOptions.addArguments("--disable-notifications");
+    firefoxOptions.addArguments("--start-maximized");
 
-        WebDriverManager.firefoxdriver().browserVersion(this.browserVersion).setup();
+    WebDriverManager.firefoxdriver().browserVersion(this.browserVersion).setup();
 
-        return new FirefoxDriver(firefoxOptions);
-    }
+    return new FirefoxDriver(firefoxOptions);
+  }
 }

@@ -6,18 +6,18 @@ import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.opera.OperaOptions;
 
 public class OperaConfigure implements IBrowserSettings {
-    private String browserVersion = System.getProperty("browser.version");
+  private String browserVersion = System.getProperty("browser.version");
 
-    @Override
-    public WebDriver configure() {
-        OperaOptions operaOptions = new OperaOptions();
+  @Override
+  public WebDriver configure() {
+    OperaOptions operaOptions = new OperaOptions();
 
-        operaOptions.addArguments("--homepage=about:blank");
-        operaOptions.addArguments("--ignore-certificate-errors");
-        operaOptions.addArguments("--start-maximized");
+    operaOptions.addArguments("--homepage=about:blank");
+    operaOptions.addArguments("--ignore-certificate-errors");
+    operaOptions.addArguments("--start-maximized");
 
-        WebDriverManager.operadriver().browserVersion(this.browserVersion).setup();
+    WebDriverManager.operadriver().browserVersion(this.browserVersion).setup();
 
-        return new OperaDriver(operaOptions);
-    }
+    return new OperaDriver(operaOptions);
+  }
 }

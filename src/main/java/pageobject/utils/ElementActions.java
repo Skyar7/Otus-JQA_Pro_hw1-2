@@ -9,29 +9,30 @@ import org.openqa.selenium.interactions.Actions;
 import java.util.List;
 
 public abstract class ElementActions {
-    protected WebDriver driver;
-    protected Actions actions;
-    protected JavascriptExecutor js;
+  protected WebDriver driver;
+  protected Actions actions;
+  protected JavascriptExecutor js;
 
-    public ElementActions(WebDriver driver) {
-        this.driver = driver;
-        this.actions = new Actions(driver);
-    }
+  public ElementActions(WebDriver driver) {
+    this.driver = driver;
+    this.actions = new Actions(driver);
+  }
 
-    public WebElement $(By by) {
-        return driver.findElement(by);
-    }
+  // checkstyle-plugin ругается на названия методов $ и $$.
+  public WebElement fe(By by) {
+    return driver.findElement(by);
+  }
 
-    public List<WebElement> $$(By by) {
-        return driver.findElements(by);
-    }
+  public List<WebElement> fes(By by) {
+    return driver.findElements(by);
+  }
 
-    public void moveToElement(WebElement element) {
-        actions.moveToElement(element).perform();
-    }
+  public void moveToElement(WebElement element) {
+    actions.moveToElement(element).perform();
+  }
 
-    public void moveAndClick(WebElement element) {
-        actions.moveToElement(element);
-        element.click();
-    }
+  public void moveAndClick(WebElement element) {
+    actions.moveToElement(element);
+    element.click();
+  }
 }
