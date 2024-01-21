@@ -16,8 +16,8 @@ import java.util.Optional;
 @UrlPrefix("/")
 public class MainPage extends AbsBasePage<MainPage> {
   private List<WebElement> filteredByNameCourses;
-  private LocalDate chosenCourseTileDate;
-  private ChosenCourseCardPage chosenCourseCardPage;
+  private LocalDate earliestCourseTileDate;
+  private LocalDate latestCourseTileDate;
 
   public MainPage(WebDriver driver) {
     super(driver);
@@ -43,8 +43,7 @@ public class MainPage extends AbsBasePage<MainPage> {
         log.info(String.format("Из найденных курсов, для проверки выбран '%s'.", chosenCourse.getText()));
       }
       chosenCourse.click();
-      chosenCourseCardPage = new ChosenCourseCardPage(driver);
-      chosenCourseCardPage.checkCourseNameAndDescriptionData();
+      new AnyCourseCardPage(driver).checkCourseNameAndDescriptionData();
 
     }
   }
@@ -61,8 +60,8 @@ public class MainPage extends AbsBasePage<MainPage> {
       return mapWithLatestDate;
     }).orElseGet(HashMap::new);
 
-    this.chosenCourseTileDate = earlistCourseMap.values().iterator().next();
-    log.info(String.format("Cамый ранний курс начинается %s", this.chosenCourseTileDate));
+    this.earliestCourseTileDate = earlistCourseMap.values().iterator().next();
+    log.info(String.format("Cамый ранний курс начинается %s", this.earliestCourseTileDate));
     moveAndClick(earlistCourseMap.keySet().iterator().next());
 
     return this;
@@ -80,16 +79,19 @@ public class MainPage extends AbsBasePage<MainPage> {
       return mapWithLatestDate;
     }).orElseGet(HashMap::new);
 
-    this.chosenCourseTileDate = latestCourseMap.values().iterator().next();
-    log.info(String.format("Cамый поздний курс начинается %s", this.chosenCourseTileDate));
+    this.latestCourseTileDate = latestCourseMap.values().iterator().next();
+    log.info(String.format("Cамый поздний курс начинается %s", this.latestCourseTileDate));
     moveAndClick(latestCourseMap.keySet().iterator().next());
 
     return this;
   }
 
-  public void checkChosenCourseDate() {
-    chosenCourseCardPage = new ChosenCourseCardPage(driver);
-    Assertions.assertEquals(this.chosenCourseTileDate, chosenCourseCardPage.getCourseDate());
+  public void checkEarliestCourseDateOnTileAndOnPage() {
+    Assertions.assertEquals(this.earliestCourseTileDate, new AnyCourseCardPage(driver).getCourseDate());
+  }
+
+  public void checkLatestCourseDateOnTileAndOnPage() {
+    Assertions.assertEquals(this.latestCourseTileDate, new AnyCourseCardPage(driver).getCourseDate());
   }
 
   private Map<WebElement, LocalDate> getTilesElementsWithLocalDate() {

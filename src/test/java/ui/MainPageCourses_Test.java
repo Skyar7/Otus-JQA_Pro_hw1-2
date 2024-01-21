@@ -26,7 +26,7 @@ public class MainPageCourses_Test {
     new MainPage(driver)
             .openPage()
             .choiceEarliestCourse()
-            .checkChosenCourseDate();
+            .checkEarliestCourseDateOnTileAndOnPage();
   }
 
   @Test
@@ -34,6 +34,6 @@ public class MainPageCourses_Test {
     new MainPage(driver)
             .openPage()
             .choiceLatestCourse()
-            .checkChosenCourseDate();
+            .checkLatestCourseDateOnTileAndOnPage();
   }
 }

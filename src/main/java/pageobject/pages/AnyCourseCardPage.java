@@ -7,9 +7,9 @@ import org.openqa.selenium.WebDriver;
 
 import java.time.LocalDate;
 
-public class ChosenCourseCardPage extends AbsBasePage<ChosenCourseCardPage> {
+public class AnyCourseCardPage extends AbsBasePage<AnyCourseCardPage> {
 
-  public ChosenCourseCardPage(WebDriver driver) {
+  public AnyCourseCardPage(WebDriver driver) {
     super(driver);
   }
 
