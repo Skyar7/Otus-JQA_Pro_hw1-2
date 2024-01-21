@@ -1,79 +1,113 @@
 package pageobject.pages;
 
 import annotations.UrlPrefix;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 @UrlPrefix("/")
 public class MainPage extends AbsBasePage<MainPage> {
+  private List<WebElement> filteredByNameCourses;
+  private LocalDate chosenCourseTileDate;
+  private ChosenCourseCardPage chosenCourseCardPage;
 
   public MainPage(WebDriver driver) {
     super(driver);
   }
 
   public MainPage coursesNamesFilter(String requiredCourseName) {
-    String requiredCourseNameSelector = "img[alt*='%s'][class*='sc-1ftuaec-4']";
-    List<WebElement> result = fes(By.cssSelector(String.format(requiredCourseNameSelector, requiredCourseName)));
-    log.info(String.format("Найдено курсов %d, по запросу %s", result.size(), requiredCourseName));
-
+    String requiredCourseNameLocator = "//h5[contains(text(),'%s')]";
+    filteredByNameCourses = fes(By.xpath(String.format(requiredCourseNameLocator, requiredCourseName)));
+    log.info(String.format("Найдено курсов, по запросу '%s': %d.", requiredCourseName, filteredByNameCourses.size()));
     return this;
+  }
+
+  public void checkFilteredCourseNameAndDescriptionData() {
+
+    if (filteredByNameCourses.isEmpty()) {
+      String noCoursesForCheckingFailMessage = "Нет курсов для проверки!";
+      log.info(noCoursesForCheckingFailMessage);
+      Assertions.fail(noCoursesForCheckingFailMessage);
+    } else {
+      WebElement chosenCourse = filteredByNameCourses.get(0);
+
+      if (filteredByNameCourses.size() > 1) {
+        log.info(String.format("Из найденных курсов, для проверки выбран '%s'.", chosenCourse.getText()));
+      }
+      chosenCourse.click();
+      chosenCourseCardPage = new ChosenCourseCardPage(driver);
+      chosenCourseCardPage.checkCourseNameAndDescriptionData();
+
+    }
   }
 
   public MainPage choiceEarliestCourse() {
+    Map<WebElement, LocalDate> tilesDateMap = this.getTilesElementsWithLocalDate();
 
-    // Плитки на главной странице двух типов, с разными локаторами, поэтому будет два списка, из которых будет выбран курс с ближайшей датой.
+    Optional<Map.Entry<WebElement, LocalDate>> earliestEntry = tilesDateMap.entrySet().stream()
+            .reduce((entry1, entry2) -> entry1.getValue().isBefore(entry2.getValue()) ? entry1 : entry2);
 
-    List<WebElement> firstTypeTiles = fes(By.xpath("//span[@class='sc-1pljn7g-3 cdTYKW'][position() mod 2 = 1]"));
-    List<WebElement> secondTypeTiles = fes(By.cssSelector(".sc-12yergf-7.dPBnbE"));
-    List<WebElement> selectedTilesFromBothTypes = new ArrayList<>(Arrays.asList(this.findEarliestCourse(firstTypeTiles), this.findEarliestCourse(secondTypeTiles)));
+    Map<WebElement, LocalDate> earlistCourseMap = earliestEntry.map(entry -> {
+      Map<WebElement, LocalDate> mapWithLatestDate = new HashMap<>();
+      mapWithLatestDate.put(entry.getKey(), entry.getValue());
+      return mapWithLatestDate;
+    }).orElseGet(HashMap::new);
 
-    moveAndClick(this.findEarliestCourse(selectedTilesFromBothTypes));
+    this.chosenCourseTileDate = earlistCourseMap.values().iterator().next();
+    log.info(String.format("Cамый ранний курс начинается %s", this.chosenCourseTileDate));
+    moveAndClick(earlistCourseMap.keySet().iterator().next());
 
     return this;
   }
 
-  private WebElement findEarliestCourse(List<WebElement> list) {
-    LocalDate date;
-    LocalDate earliestDate = LocalDate.MAX;
-    WebElement earliestTile = null;
+  public MainPage choiceLatestCourse() {
+    Map<WebElement, LocalDate> tilesDateMap = this.getTilesElementsWithLocalDate();
 
-    for (WebElement element : list) {
-      String dateStr = element.getText();
+    Optional<Map.Entry<WebElement, LocalDate>> latestEntry = tilesDateMap.entrySet().stream()
+            .reduce((entry1, entry2) -> entry1.getValue().isAfter(entry2.getValue()) ? entry1 : entry2);
 
-      if (dateStr.endsWith("месяцев")) {
-        dateStr = dateStr.substring(0, dateStr.length() - 10).trim();
-      } else if (dateStr.endsWith("месяца")) {
-        dateStr = dateStr.substring(0, dateStr.length() - 9);
-      } else if (dateStr.endsWith("месяц")) {
-        dateStr = dateStr.substring(0, dateStr.length() - 8);
-      }
+    Map<WebElement, LocalDate> latestCourseMap = latestEntry.map(entry -> {
+      Map<WebElement, LocalDate> mapWithLatestDate = new HashMap<>();
+      mapWithLatestDate.put(entry.getKey(), entry.getValue());
+      return mapWithLatestDate;
+    }).orElseGet(HashMap::new);
 
-      // На некоторых плитках есть надпись просто "В декабре" и точной даты нет, поэтому их пропускаем.
-      if (dateStr.contains("В")) {
-        continue;
-      } else if (dateStr.contains("года")) {
-        date = LocalDate.parse(dateStr.substring(2, dateStr.length() - 5), DateTimeFormatter.ofPattern("d MMMM yyyy"));
-      } else {
-        date = LocalDate.parse(dateStr.substring(2) + " " + LocalDate.now().getYear(), DateTimeFormatter.ofPattern("d MMMM yyyy"));
-      }
+    this.chosenCourseTileDate = latestCourseMap.values().iterator().next();
+    log.info(String.format("Cамый поздний курс начинается %s", this.chosenCourseTileDate));
+    moveAndClick(latestCourseMap.keySet().iterator().next());
 
-      if (date.isBefore(earliestDate)) {
-        earliestDate = date;
-        earliestTile = element;
-      }
+    return this;
+  }
+
+  public void checkChosenCourseDate() {
+    chosenCourseCardPage = new ChosenCourseCardPage(driver);
+    Assertions.assertEquals(this.chosenCourseTileDate, chosenCourseCardPage.getCourseDate());
+  }
+
+  private Map<WebElement, LocalDate> getTilesElementsWithLocalDate() {
+
+    // Плитки на главной странице двух типов, с разными локаторами.
+    String firstTypeTilesLocator = "//span[@class='sc-1pljn7g-3 cdTYKW' and contains(text(), 'С ')]";
+    String secondTypeTilesSelector = ".sc-12yergf-7.dPBnbE";
+
+    List<WebElement> tilesList = fes(By.xpath(firstTypeTilesLocator));
+    tilesList.addAll(fes(By.cssSelector(secondTypeTilesSelector)));
+
+    Map<WebElement, LocalDate> tilesDateMap = new HashMap<>();
+
+    for (WebElement element : tilesList) {
+      LocalDate date = dateParser(element);
+      tilesDateMap.put(element, date);
     }
 
-    if (list.size() == 2) {
-      log.info(String.format("Cамый ранний курс начинается %s", earliestDate));
-    }
-
-    return earliestTile;
+    return tilesDateMap;
   }
 }

@@ -14,10 +14,26 @@ public class MainPageCourses_Test {
   private WebDriver driver;
 
   @Test
-  public void test() {
+  public void choiceCourseByNameAndCheckItDataTest() {
     new MainPage(driver)
             .openPage()
-            .coursesNamesFilter("QA")
-            .choiceEarliestCourse();
+            .coursesNamesFilter("Специализация")
+            .checkFilteredCourseNameAndDescriptionData();
+  }
+
+  @Test
+  public void choiceEarliestCourseAndCheckDateTest() {
+    new MainPage(driver)
+            .openPage()
+            .choiceEarliestCourse()
+            .checkChosenCourseDate();
+  }
+
+  @Test
+  public void choiceLatestCourseAndCheckDateTest() {
+    new MainPage(driver)
+            .openPage()
+            .choiceLatestCourse()
+            .checkChosenCourseDate();
   }
 }

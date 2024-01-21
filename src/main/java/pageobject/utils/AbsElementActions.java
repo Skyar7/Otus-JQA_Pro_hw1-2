@@ -8,12 +8,12 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
-public abstract class ElementActions {
+public abstract class AbsElementActions {
   protected WebDriver driver;
   protected Actions actions;
   protected JavascriptExecutor js;
 
-  public ElementActions(WebDriver driver) {
+  public AbsElementActions(WebDriver driver) {
     this.driver = driver;
     this.actions = new Actions(driver);
   }

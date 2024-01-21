@@ -40,7 +40,7 @@ public class Waiters {
     return waitForCondition(ExpectedConditions.visibilityOf(element));
   }
 
-  public boolean waitForElementNotvisible(By by) {
+  public boolean waitForElementNotVisible(By by) {
     return waitForCondition(ExpectedConditions.invisibilityOfElementLocated(by));
   }
 }
