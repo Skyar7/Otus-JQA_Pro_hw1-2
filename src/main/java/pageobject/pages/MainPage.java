@@ -42,9 +42,9 @@ public class MainPage extends AbsBasePage<MainPage> {
       if (filteredByNameCourses.size() > 1) {
         log.info(String.format("Из найденных курсов, для проверки выбран '%s'.", chosenCourse.getText()));
       }
+
       chosenCourse.click();
       new AnyCourseCardPage(driver).checkCourseNameAndDescriptionData();
-
     }
   }
 
