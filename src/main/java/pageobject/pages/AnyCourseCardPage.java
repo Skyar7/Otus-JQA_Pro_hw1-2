@@ -34,6 +34,6 @@ public class AnyCourseCardPage extends AbsBasePage<AnyCourseCardPage> {
   }
 
   public LocalDate getCourseDate() {
-    return dateParser(fe(By.xpath("//div[@class='sc-3cb1l3-4 kGoYMV'][1]")));
+    return dateParser(fe(By.xpath("//div[@class='sc-3cb1l3-4 kGoYMV']//p[substring(text(), string-length(text()) - 0) = 'я' or contains(text(),'та')]")));
   }
 }
