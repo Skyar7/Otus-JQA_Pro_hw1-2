@@ -16,7 +16,7 @@ public class PreparatoryCoursesPageSteps {
   }
 
   @Тогда("Найти самый дешёвый и дорогой курсы")
-  public void findCheapestAndMostExpensiveCourses() {
-    preparatoryCoursesPage.findCheapestAndMostExpensiveCourses();
+  public void findLowestAndHighestPriceCourses() {
+    preparatoryCoursesPage.findLowestAndHighestPriceCourses();
   }
 }

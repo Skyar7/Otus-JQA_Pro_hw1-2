@@ -4,8 +4,6 @@ import com.google.inject.Inject;
 import io.cucumber.java.ru.*;
 import otus.pages.MainPage;
 
-import java.io.IOException;
-
 public class MainPageSteps {
 
   @Inject
