@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import io.cucumber.java.ru.*;
 import otus.pages.MainPage;
 
+import java.io.IOException;
+
 public class MainPageSteps {
 
   @Inject
@@ -28,8 +30,12 @@ public class MainPageSteps {
 
   @Тогда("Открыть самый поздний курс и проверить дату")
   public void latestCourseCheck() {
-    mainPage.choiceEarliestCourse()
-            .checkEarliestCourseDateOnTileAndOnPage();
+    mainPage.choiceLatestCourse()
+            .checkLatestCourseDateOnTileAndOnPage();
   }
 
+  @Тогда("Найти курс, стартующий не раньше даты {string}")
+  public void findRequiredOrLaterDateCourse(String requiredCourseDate) {
+    mainPage.findRequiredOrLaterDateCourse(requiredCourseDate);
+  }
 }
