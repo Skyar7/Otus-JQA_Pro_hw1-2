@@ -7,22 +7,38 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
-
+  private String driverType = System.getProperty("driver.type");
   private EventFiringWebDriver driver = null;
 
   @Override
-  public void beforeEach(ExtensionContext extensionContext) throws IllegalAccessException {
-    driver = new WebDriverFactory().create();
-    driver.register(new WebDriverListener());
+  public void beforeEach(ExtensionContext extensionContext) throws IllegalAccessException, MalformedURLException {
+
+    if (Objects.equals(this.driverType, "remote")) {
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setCapability(CapabilityType.BROWSER_NAME, System.getProperty("browser.name").toLowerCase());
+      capabilities.setCapability(CapabilityType.BROWSER_VERSION, System.getProperty("browser.version"));
+      capabilities.setCapability("enableVNC", true);
+      WebDriver remoteDriver = new RemoteWebDriver(URI.create(System.getProperty("remote.url")).toURL(), capabilities);
+      this.driver = new EventFiringWebDriver(remoteDriver).register(new WebDriverListener());
+    } else {
+      this.driver = new WebDriverFactory().create().register(new WebDriverListener());
+    }
+
     List<Field> fields = this.getAnnotatedFields(Driver.class, extensionContext);
 
     for (Field field : fields) {
