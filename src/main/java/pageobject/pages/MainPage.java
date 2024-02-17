@@ -45,7 +45,7 @@ public class MainPage extends AbsBasePage<MainPage> {
       if (filteredByNameCourses.size() > 1) {
         log.info(String.format("Из найденных курсов, для проверки случайно был выбран '%s'.", chosenCourse.getText()));
       }
-      moveAndClick(chosenCourse);
+      chosenCourse.click();
       new AnyCourseCardPage(driver).checkCourseNameAndDescriptionData();
     }
   }
