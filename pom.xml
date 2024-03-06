@@ -83,17 +83,18 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.execution.parallel.enabled = true
+                            junit.jupiter.execution.parallel.mode.default = concurrent
+                        </configurationParameters>
+                    </properties>
                     <systemProperties>
                         <browser.name>${browser.name}</browser.name>
                         <browser.version>${browser.version}</browser.version>
                         <base.url>${base.url}</base.url>
                         <remote.url>${remote.url}</remote.url>
-                        <configurationParameters>
-                            <junit.jupiter.execution.parallel.enabled>true</junit.jupiter.execution.parallel.enabled>
-                            <junit.jupiter.execution.parallel.mode.default>concurrent</junit.jupiter.execution.parallel.mode.default>
-                        </configurationParameters>
                     </systemProperties>
-
                 </configuration>
             </plugin>
             <plugin>
