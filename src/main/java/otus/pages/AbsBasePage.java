@@ -1,5 +1,6 @@
 package otus.pages;
 
+import org.openqa.selenium.By;
 import otus.annotations.UrlPrefix;
 import com.google.inject.Inject;
 import otus.pageobject.AbsBaseUtils;
@@ -17,6 +18,10 @@ public abstract class AbsBasePage<T extends AbsBasePage<T>> extends AbsBaseUtils
   public T openPage() {
     driver.get(BASE_URL + getUrlPrefix());
     return (T) this;
+  }
+
+  protected void closeCookiesMessage() {
+    fe(By.xpath("//button[@class='sc-9a4spb-0 ckCZjI']")).click();
   }
 
   private String getUrlPrefix() {

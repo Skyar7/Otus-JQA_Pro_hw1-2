@@ -3,6 +3,7 @@ package otus.pages;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.ElementClickInterceptedException;
 import otus.annotations.UrlPrefix;
 import com.google.inject.Inject;
 import org.junit.jupiter.api.Assertions;
@@ -47,7 +48,13 @@ public class MainPage extends AbsBasePage<MainPage> {
       if (filteredByNameCourses.size() > 1) {
         log.info(String.format("Из найденных курсов, для проверки случайно был выбран '%s'.", chosenCourse.getText()));
       }
-      moveAndClick(chosenCourse);
+
+      try {
+        moveAndClick(chosenCourse);
+      } catch (ElementClickInterceptedException e) {
+        closeCookiesMessage();
+        moveAndClick(chosenCourse);
+      }
     }
   }
 
@@ -65,7 +72,13 @@ public class MainPage extends AbsBasePage<MainPage> {
 
     this.earliestCourseTileDate = earlistCourseMap.values().iterator().next();
     log.info(String.format("Cамый ранний курс начинается %s", this.earliestCourseTileDate));
-    moveAndClick(earlistCourseMap.keySet().iterator().next());
+
+    try {
+      moveAndClick(earlistCourseMap.keySet().iterator().next());
+    } catch (ElementClickInterceptedException e) {
+      closeCookiesMessage();
+      moveAndClick(earlistCourseMap.keySet().iterator().next());
+    }
 
     return this;
   }
@@ -84,7 +97,13 @@ public class MainPage extends AbsBasePage<MainPage> {
 
     this.latestCourseTileDate = latestCourseMap.values().iterator().next();
     log.info(String.format("Cамый поздний курс начинается %s", this.latestCourseTileDate));
-    moveAndClick(latestCourseMap.keySet().iterator().next());
+
+    try {
+      moveAndClick(latestCourseMap.keySet().iterator().next());
+    } catch (ElementClickInterceptedException e) {
+      closeCookiesMessage();
+      moveAndClick(latestCourseMap.keySet().iterator().next());
+    }
 
     return this;
   }
