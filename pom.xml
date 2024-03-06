@@ -29,8 +29,9 @@
         <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
 
         <browser.name>chrome</browser.name>
-        <browser.version/>
+        <browser.version>121.0</browser.version>
         <base.url>https://otus.ru</base.url>
+        <remote.url>http://127.0.0.1/wd/hub</remote.url>
     </properties>
 
     <dependencies>
@@ -114,6 +115,7 @@
                         <browser.name>${browser.name}</browser.name>
                         <browser.version>${browser.version}</browser.version>
                         <base.url>${base.url}</base.url>
+                        <remote.url>${remote.url}</remote.url>
                     </systemProperties>
                 </configuration>
             </plugin>

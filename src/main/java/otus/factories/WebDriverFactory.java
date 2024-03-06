@@ -19,6 +19,10 @@ public class WebDriverFactory implements IFactory<EventFiringWebDriver> {
     this.browserName = browserName;
   }
 
+  public String getBrowserName() {
+    return browserName;
+  }
+
   @Override
   public EventFiringWebDriver create() {
     switch (this.browserName) {
