@@ -15,6 +15,14 @@ public class CoursesPages_Test {
   private WebDriver driver;
 
   @Test
+  public void choiceCourseByNameAndCheckItDataTest() {
+    new MainPage(driver)
+            .openPage()
+            .coursesNamesFilter("Специализация С++")
+            .checkFilteredCourseNameAndDescriptionData();
+  }
+
+  @Test
   public void choiceEarliestCourseAndCheckDateTest() {
     new MainPage(driver)
             .openPage()
@@ -42,13 +50,5 @@ public class CoursesPages_Test {
     new PreparatoryCoursesPage(driver)
             .openPage()
             .findLowestAndHighestPriceCourses();
-  }
-
-  @Test
-  public void choiceCourseByNameAndCheckItDataTest() {
-    new MainPage(driver)
-            .openPage()
-            .coursesNamesFilter("Специализация")
-            .checkFilteredCourseNameAndDescriptionData();
   }
 }
