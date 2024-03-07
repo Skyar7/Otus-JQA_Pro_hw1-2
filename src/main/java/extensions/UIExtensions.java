@@ -53,8 +53,8 @@ public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
     if (driver.get() != null) {
       driver.get().close();
       driver.get().quit();
-      driver.remove();
     }
+    driver.remove();
   }
 
   private List<Field> getAnnotatedFields(Class<? extends Annotation> annotation, ExtensionContext extensionContext) {
