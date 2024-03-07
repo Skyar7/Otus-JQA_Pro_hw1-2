@@ -22,21 +22,20 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
+  private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
   private String driverType = System.getProperty("driver.type");
-  private EventFiringWebDriver driver = null;
 
   @Override
   public void beforeEach(ExtensionContext extensionContext) throws IllegalAccessException, MalformedURLException {
-
     if (Objects.equals(this.driverType, "remote")) {
       DesiredCapabilities capabilities = new DesiredCapabilities();
       capabilities.setCapability(CapabilityType.BROWSER_NAME, System.getProperty("browser.name").toLowerCase());
       capabilities.setCapability(CapabilityType.BROWSER_VERSION, System.getProperty("browser.version"));
       capabilities.setCapability("enableVNC", true);
       WebDriver remoteDriver = new RemoteWebDriver(URI.create(System.getProperty("remote.url")).toURL(), capabilities);
-      this.driver = new EventFiringWebDriver(remoteDriver).register(new WebDriverListener());
+      driver.set(new EventFiringWebDriver(remoteDriver).register(new WebDriverListener()));
     } else {
-      this.driver = new WebDriverFactory().create().register(new WebDriverListener());
+      driver.set(new WebDriverFactory().create().register(new WebDriverListener()));
     }
 
     List<Field> fields = this.getAnnotatedFields(Driver.class, extensionContext);
@@ -44,16 +43,17 @@ public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
     for (Field field : fields) {
       if (field.getType().getName().equals(WebDriver.class.getName())) {
         field.setAccessible(true);
-        field.set(extensionContext.getTestInstance().get(), driver);
+        field.set(extensionContext.getTestInstance().get(), driver.get());
       }
     }
   }
 
   @Override
   public void afterEach(ExtensionContext extensionContext) throws Exception {
-    if (driver != null) {
-      driver.close();
-      driver.quit();
+    if (driver.get() != null) {
+      driver.get().close();
+      driver.get().quit();
+      driver.remove();
     }
   }
 
