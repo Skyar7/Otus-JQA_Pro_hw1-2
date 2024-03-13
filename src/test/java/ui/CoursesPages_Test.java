@@ -18,7 +18,7 @@ public class CoursesPages_Test {
   public void choiceCourseByNameAndCheckItDataTest() {
     new MainPage(driver)
             .openPage()
-            .coursesNamesFilter("Специализация С++")
+            .coursesNamesFilter("Специализация Системный аналитик")
             .checkFilteredCourseNameAndDescriptionData();
   }
 
@@ -42,7 +42,7 @@ public class CoursesPages_Test {
   public void findMainPageRequiredOrLaterDateCourseTest() {
     new MainPage(driver)
             .openPage()
-            .findRequiredOrLaterDateCourse("11.03.2024");
+            .findRequiredOrLaterDateCourse("11.04.2024");
   }
 
   @Test

@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @UrlPrefix("/")
 public class MainPage extends AbsBasePage<MainPage> {
   private List<WebElement> filteredByNameCourses;
@@ -25,8 +24,9 @@ public class MainPage extends AbsBasePage<MainPage> {
   }
 
   public MainPage coursesNamesFilter(String requiredCourseName) {
-    String requiredCourseNameLocator = "//h5[contains(text(),'%s')]";
-    this.filteredByNameCourses = fes(By.xpath(String.format(requiredCourseNameLocator, requiredCourseName)));
+    String templCourseNameLocator = "//h5[contains(text(),'%s')]";
+
+    this.filteredByNameCourses = fes(By.xpath(String.format(templCourseNameLocator, requiredCourseName)));
     log.info(String.format("Найдено курсов, по запросу '%s': %d.", requiredCourseName, filteredByNameCourses.size()));
     return this;
   }
@@ -153,6 +153,14 @@ public class MainPage extends AbsBasePage<MainPage> {
     // Плитки на главной странице двух типов, с разными локаторами.
     String firstTypeTilesLocator = "//span[@class='sc-1pljn7g-3 cdTYKW' and contains(text(), 'С ')]";
     String secondTypeTilesSelector = ".sc-12yergf-7.dPBnbE";
+
+    //    try {
+    //      Thread.sleep(15000);
+    //    } catch (InterruptedException e) {
+    //      throw new RuntimeException(e);
+    //    }
+
+    //    waiters.waitForElementVisible(By.cssSelector(".iconWrap_f24a"));
 
     List<WebElement> tilesList = fes(By.xpath(firstTypeTilesLocator));
     tilesList.addAll(fes(By.cssSelector(secondTypeTilesSelector)));
