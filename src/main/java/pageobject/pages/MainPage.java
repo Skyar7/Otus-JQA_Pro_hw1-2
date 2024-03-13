@@ -6,13 +6,13 @@ import org.jsoup.select.Elements;
 import annotations.UrlPrefix;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
+import waiters.Waiters;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 @UrlPrefix("/")
 public class MainPage extends AbsBasePage<MainPage> {
@@ -25,8 +25,10 @@ public class MainPage extends AbsBasePage<MainPage> {
   }
 
   public MainPage coursesNamesFilter(String requiredCourseName) {
-    String requiredCourseNameLocator = "//h5[contains(text(),'%s')]";
-    this.filteredByNameCourses = fes(By.xpath(String.format(requiredCourseNameLocator, requiredCourseName)));
+    String templCourseNameLocator = "//h5[contains(text(),'%s')]";
+
+    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
+    this.filteredByNameCourses = fes(By.xpath(String.format(templCourseNameLocator, requiredCourseName)));
     log.info(String.format("Найдено курсов, по запросу '%s': %d.", requiredCourseName, filteredByNameCourses.size()));
     return this;
   }
@@ -154,11 +156,11 @@ public class MainPage extends AbsBasePage<MainPage> {
     String firstTypeTilesLocator = "//span[@class='sc-1pljn7g-3 cdTYKW' and contains(text(), 'С ')]";
     String secondTypeTilesSelector = ".sc-12yergf-7.dPBnbE";
 
+    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
     List<WebElement> tilesList = fes(By.xpath(firstTypeTilesLocator));
     tilesList.addAll(fes(By.cssSelector(secondTypeTilesSelector)));
 
     Map<WebElement, LocalDate> tilesDateMap = new HashMap<>();
-
     for (WebElement element : tilesList) {
       LocalDate date = dateParser(element);
       tilesDateMap.put(element, date);

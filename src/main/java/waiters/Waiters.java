@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Waiters {
   private WebDriver driver;
-  private int timeoutSec = 5;
+  private int timeoutSec = 15;
 
   public Waiters(WebDriver driver) {
     this.driver = driver;
@@ -36,10 +36,6 @@ public class Waiters {
     return waitForCondition(ExpectedConditions.visibilityOfElementLocated(by));
   }
 
-  public boolean waitForElementVisible(WebElement element) {
-    return waitForCondition(ExpectedConditions.visibilityOf(element));
-  }
-
   public boolean waitForElementNotVisible(By by) {
     return waitForCondition(ExpectedConditions.invisibilityOfElementLocated(by));
   }
@@ -47,4 +43,9 @@ public class Waiters {
   public boolean waitForElementClickable(WebElement element) {
     return waitForCondition(ExpectedConditions.elementToBeClickable(element));
   }
+
+  public boolean presenceOfElementLocated(By by) {
+    return waitForCondition(ExpectedConditions.presenceOfElementLocated(by));
+  }
+
 }

@@ -18,7 +18,7 @@ public abstract class AbsElementActions {
   public AbsElementActions(WebDriver driver) {
     this.driver = driver;
     this.actions = new Actions(driver);
-    this.actionWaiter = new Waiters(driver);
+    this.actionWaiter = new Waiters(driver, 10);
   }
 
   // checkstyle-plugin ругается на названия методов $ и $$.
