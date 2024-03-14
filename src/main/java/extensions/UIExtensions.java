@@ -38,13 +38,13 @@ public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
       capabilities.setCapability(CapabilityType.BROWSER_VERSION, browserVersion);
       capabilities.setCapability("enableVNC", true);
 
-      if ("chrome".equals(browserName)) {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setExperimentalOption("prefs", new HashMap<String, Object>() {{
-            put("profile.managed_default_content_settings.javascript", 2); // Блокировка JavaScript
-          }});
-        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-      }
+      //      if ("chrome".equals(browserName)) {
+      //        ChromeOptions chromeOptions = new ChromeOptions();
+      //        chromeOptions.setExperimentalOption("prefs", new HashMap<String, Object>() {{
+      //            put("profile.managed_default_content_settings.javascript", 2); // Блокировка JavaScript
+      //          }});
+      //        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+      //      }
 
       WebDriver remoteDriver = new RemoteWebDriver(URI.create(System.getProperty("remote.url")).toURL(), capabilities);
       driver.set(new EventFiringWebDriver(remoteDriver).register(new WebDriverListener()));

@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Waiters {
   private WebDriver driver;
-  private int timeoutSec = 15;
+  private int timeoutSec = 20;
 
   public Waiters(WebDriver driver) {
     this.driver = driver;
@@ -47,5 +47,4 @@ public class Waiters {
   public boolean presenceOfElementLocated(By by) {
     return waitForCondition(ExpectedConditions.presenceOfElementLocated(by));
   }
-
 }

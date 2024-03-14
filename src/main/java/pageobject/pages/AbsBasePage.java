@@ -2,8 +2,11 @@ package pageobject.pages;
 
 import annotations.UrlPrefix;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageobject.utils.AbsBaseUtils;
 
 public abstract class AbsBasePage<T extends AbsBasePage<T>> extends AbsBaseUtils {

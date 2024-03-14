@@ -6,7 +6,6 @@ import org.jsoup.select.Elements;
 import annotations.UrlPrefix;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
-import waiters.Waiters;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 @UrlPrefix("/")
 public class MainPage extends AbsBasePage<MainPage> {
-  private List<WebElement> filteredByNameCourses;
   private LocalDate earliestCourseTileDate;
   private LocalDate latestCourseTileDate;
 
@@ -24,18 +22,14 @@ public class MainPage extends AbsBasePage<MainPage> {
     super(driver);
   }
 
-  public MainPage coursesNamesFilter(String requiredCourseName) {
+  public void filterAndOpenCourseByName(String requiredCourseName) {
     String templCourseNameLocator = "//h5[contains(text(),'%s')]";
 
     waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
-    this.filteredByNameCourses = fes(By.xpath(String.format(templCourseNameLocator, requiredCourseName)));
+    List<WebElement> filteredByNameCourses = fes(By.xpath(String.format(templCourseNameLocator, requiredCourseName)));
     log.info(String.format("Найдено курсов, по запросу '%s': %d.", requiredCourseName, filteredByNameCourses.size()));
-    return this;
-  }
 
-  public void checkFilteredCourseNameAndDescriptionData() {
-
-    if (this.filteredByNameCourses.isEmpty()) {
+    if (filteredByNameCourses.isEmpty()) {
       String noCoursesForCheckingFailMessage = "Нет курсов для проверки!";
       log.info(noCoursesForCheckingFailMessage);
       Assertions.fail(noCoursesForCheckingFailMessage);
@@ -52,8 +46,6 @@ public class MainPage extends AbsBasePage<MainPage> {
         closeCookiesMessage();
         moveAndClick(chosenCourse);
       }
-
-      new AnyCourseCardPage(driver).checkCourseNameAndDescriptionData();
     }
   }
 

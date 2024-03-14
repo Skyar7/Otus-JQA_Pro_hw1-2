@@ -16,6 +16,7 @@ public class AnyCourseCardPage extends AbsBasePage<AnyCourseCardPage> {
   public void checkCourseNameAndDescriptionData() {
     String name = "";
 
+    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
     try {
       name = fe(By.cssSelector(".sc-1og4wiw-0.sc-s2pydo-1.ifZfhS.diGrSa")).getText();
     } catch (NoSuchElementException e) {
@@ -34,6 +35,7 @@ public class AnyCourseCardPage extends AbsBasePage<AnyCourseCardPage> {
   }
 
   public LocalDate getCourseDate() {
+    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
     return dateParser(fe(By.xpath("//div[@class='sc-3cb1l3-4 kGoYMV']//p[substring(text(), string-length(text()) - 0) = 'я' or contains(text(),'та')]")));
   }
 }

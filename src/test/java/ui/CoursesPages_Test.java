@@ -5,6 +5,7 @@ import extensions.UIExtensions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
+import pageobject.pages.AnyCourseCardPage;
 import pageobject.pages.MainPage;
 import pageobject.pages.PreparatoryCoursesPage;
 
@@ -18,8 +19,10 @@ public class CoursesPages_Test {
   public void choiceCourseByNameAndCheckItDataTest() {
     new MainPage(driver)
             .openPage()
-            .coursesNamesFilter("Специализация Системный аналитик")
-            .checkFilteredCourseNameAndDescriptionData();
+            .filterAndOpenCourseByName("Специализация Системный аналитик");
+
+    new AnyCourseCardPage(driver)
+            .checkCourseNameAndDescriptionData();
   }
 
   @Test
