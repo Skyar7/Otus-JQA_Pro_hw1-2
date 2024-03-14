@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Waiters {
   private WebDriver driver;
-  private int timeoutSec = 5;
+  private int timeoutSec = 15;
 
   public Waiters(WebDriver driver) {
     this.driver = driver;
@@ -43,4 +43,9 @@ public class Waiters {
   public boolean waitForElementClickable(WebElement element) {
     return waitForCondition(ExpectedConditions.elementToBeClickable(element));
   }
+
+  public boolean presenceOfElementLocated(By by) {
+    return waitForCondition(ExpectedConditions.presenceOfElementLocated(by));
+  }
+
 }
