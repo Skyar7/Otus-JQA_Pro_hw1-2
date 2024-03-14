@@ -24,7 +24,7 @@ public abstract class AbsBaseUtils extends AbsElementActions {
     String dateStr = inputDate.getText();
 
     if (dateStr.startsWith("С ")) {
-      dateStr =dateStr.substring(2);
+      dateStr = dateStr.substring(2);
     }
 
     if (dateStr.endsWith("месяцев")) {

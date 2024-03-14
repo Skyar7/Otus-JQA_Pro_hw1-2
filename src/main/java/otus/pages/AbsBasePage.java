@@ -1,6 +1,7 @@
 package otus.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import otus.annotations.UrlPrefix;
 import com.google.inject.Inject;
 import otus.pageobject.AbsBaseUtils;
@@ -9,6 +10,7 @@ import otus.support.GuiceScoped;
 public abstract class AbsBasePage<T extends AbsBasePage<T>> extends AbsBaseUtils {
 
   protected final static String BASE_URL = System.getProperty("base.url");
+  protected String jivoChatIconLocator = "//jdiv[@class='iconWrap_f24a']";
 
   @Inject
   public AbsBasePage(GuiceScoped guiceScoped) {
@@ -21,7 +23,8 @@ public abstract class AbsBasePage<T extends AbsBasePage<T>> extends AbsBaseUtils
   }
 
   protected void closeCookiesMessage() {
-    fe(By.xpath("//button[@class='sc-9a4spb-0 ckCZjI']")).click();
+    WebElement cookieMessageButton = fe(By.cssSelector(".sc-9a4spb-0.ckCZjI"));
+    moveAndClick(cookieMessageButton);
   }
 
   private String getUrlPrefix() {

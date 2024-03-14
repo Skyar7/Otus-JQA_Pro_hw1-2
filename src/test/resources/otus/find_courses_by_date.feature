@@ -9,4 +9,4 @@
     Тогда Найти курс, стартующий не раньше даты <requiredCourseDate>
     Примеры:
       | browser  | requiredCourseDate |
-      | "Chrome" | "11.03.2024"       |
+      | "Chrome" | "11.06.2024"       |

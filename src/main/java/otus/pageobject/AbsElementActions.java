@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import otus.support.GuiceScoped;
+import otus.waiters.Waiters;
 
 import java.util.List;
 
@@ -15,15 +16,16 @@ public abstract class AbsElementActions {
   protected Actions actions;
   protected JavascriptExecutor js;
   protected GuiceScoped guiceScoped;
+  private Waiters actionWaiter;
 
   @Inject
   public AbsElementActions(GuiceScoped guiceScoped) {
     this.guiceScoped = guiceScoped;
     this.driver = guiceScoped.getDriver();
     this.actions = new Actions(driver);
+    this.actionWaiter = new Waiters(driver, 10);
   }
 
-  // checkstyle-plugin ругается на названия методов $ и $$.
   public WebElement fe(By by) {
     return driver.findElement(by);
   }
@@ -37,7 +39,8 @@ public abstract class AbsElementActions {
   }
 
   public void moveAndClick(WebElement element) {
-    actions.moveToElement(element);
+    actionWaiter.waitForElementClickable(element);
+    this.moveToElement(element);
     element.click();
   }
 }

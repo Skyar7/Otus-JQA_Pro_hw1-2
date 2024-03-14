@@ -2,6 +2,7 @@ package otus.steps.pages;
 
 import com.google.inject.Inject;
 import io.cucumber.java.ru.*;
+import otus.pages.AnyCourseCardPage;
 import otus.pages.MainPage;
 
 public class MainPageSteps {
@@ -16,8 +17,7 @@ public class MainPageSteps {
 
   @И("Найден и открыт курс с названием {string}")
   public void findAndOpenCourse(String requiredCourseName) {
-    mainPage.coursesNamesFilter(requiredCourseName)
-            .chooseFilteredByNameCourse();
+    mainPage.filterAndOpenCourseByName(requiredCourseName);
   }
 
   @Тогда("Открыть самый ранний курс и проверить дату")

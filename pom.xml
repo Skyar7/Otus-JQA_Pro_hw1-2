@@ -105,12 +105,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-<!--                    <properties>-->
-<!--                        <configurationParameters>-->
-<!--                            cucumber.execution.parallel.enabled=true-->
-<!--                            cucumber.execution.parallel.config.strategy=dynamic-->
-<!--                        </configurationParameters>-->
-<!--                    </properties>-->
+                    <properties>
+                        <configurationParameters>
+                            cucumber.execution.parallel.enabled=true
+                            cucumber.execution.parallel.config.strategy=dynamic
+                        </configurationParameters>
+                    </properties>
                     <systemProperties>
                         <browser.name>${browser.name}</browser.name>
                         <browser.version>${browser.version}</browser.version>
