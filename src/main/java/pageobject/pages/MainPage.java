@@ -25,7 +25,7 @@ public class MainPage extends AbsBasePage<MainPage> {
   public void filterAndOpenCourseByName(String requiredCourseName) {
     String templCourseNameLocator = "//h5[contains(text(),'%s')]";
 
-    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
+    waiters.presenceOfElementLocated(By.xpath(jivoChatIconLocator));
     List<WebElement> filteredByNameCourses = fes(By.xpath(String.format(templCourseNameLocator, requiredCourseName)));
     log.info(String.format("Найдено курсов, по запросу '%s': %d.", requiredCourseName, filteredByNameCourses.size()));
 
@@ -115,31 +115,35 @@ public class MainPage extends AbsBasePage<MainPage> {
             .filter(entry -> entry.getValue().isEqual(requiredCourseDate) || entry.getValue().isAfter(requiredCourseDate))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    log.info(String.format("Курсы, которые начинаются не раньше %s: ", requiredCourseDateStr));
-    filteredMap.forEach((key, value) -> {
+    if (!filteredMap.isEmpty()) {
+      log.info(String.format("Курсы, которые начинаются не раньше %s: ", requiredCourseDateStr));
+      filteredMap.forEach((key, value) -> {
 
-      // Поиск вверх по дереву атрибута, содержащего ссылку на страницу курса.
-      WebElement parentElement = key;
-      String hrefValue = null;
+        // Поиск вверх по дереву атрибута, содержащего ссылку на страницу курса.
+        WebElement parentElement = key;
+        String hrefValue = null;
 
-      while (parentElement != null) {
-        hrefValue = parentElement.getAttribute("href");
-        if (hrefValue != null) {
-          break;
+        while (parentElement != null) {
+          hrefValue = parentElement.getAttribute("href");
+          if (hrefValue != null) {
+            break;
+          }
+          parentElement = parentElement.findElement(By.xpath(".."));
         }
-        parentElement = parentElement.findElement(By.xpath(".."));
-      }
 
-      // Использование найденной ссылки для jsoup парсера и вывода названия курса
-      try {
-        Document doc = Jsoup.connect(hrefValue).get();
-        Elements nameCourse = doc.select(".sc-1og4wiw-0.sc-s2pydo-1.ifZfhS.diGrSa");
-        log.info("Название: " + nameCourse.get(0).text());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-      log.info("Дата старта: " + value.toString());
-    });
+        // Использование найденной ссылки для jsoup парсера и вывода названия курса
+        try {
+          Document doc = Jsoup.connect(hrefValue).get();
+          Elements nameCourse = doc.select(".sc-1og4wiw-0.sc-s2pydo-1.ifZfhS.diGrSa");
+          log.info("Название: " + nameCourse.get(0).text());
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+        log.info("Дата старта: " + value.toString());
+      });
+    } else {
+      log.info(String.format("Курсов, которые начинаются не раньше %s не найдено! ", requiredCourseDateStr));
+    }
   }
 
   private Map<WebElement, LocalDate> getTilesElementsWithLocalDate() {
@@ -148,7 +152,7 @@ public class MainPage extends AbsBasePage<MainPage> {
     String firstTypeTilesLocator = "//span[@class='sc-1pljn7g-3 cdTYKW' and contains(text(), 'С ')]";
     String secondTypeTilesSelector = ".sc-12yergf-7.dPBnbE";
 
-    waiters.presenceOfElementLocated(By.xpath("//jdiv[@class='iconWrap_f24a']"));
+    waiters.presenceOfElementLocated(By.xpath(jivoChatIconLocator));
     List<WebElement> tilesList = fes(By.xpath(firstTypeTilesLocator));
     tilesList.addAll(fes(By.cssSelector(secondTypeTilesSelector)));
 

@@ -12,6 +12,7 @@ import pageobject.utils.AbsBaseUtils;
 public abstract class AbsBasePage<T extends AbsBasePage<T>> extends AbsBaseUtils {
 
   protected final static String BASE_URL = System.getProperty("base.url");
+  protected String jivoChatIconLocator = "//jdiv[@class='iconWrap_f24a']";
 
   public AbsBasePage(WebDriver driver) {
     super(driver);
